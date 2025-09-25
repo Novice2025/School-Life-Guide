@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Life Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #141414;
+            color: #E5E5E5;
+        }
+        .main-content {
+            padding-top: 6rem; /* Space for the fixed header */
+        }
+        .text-overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        .option-button {
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .option-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .correct-answer {
+            background-color: #16a34a !important; /* Tailwind green-600 */
+            color: white !important;
+        }
+        .incorrect-answer {
+            background-color: #dc2626 !important; /* Tailwind red-600 */
+            color: white !important;
+        }
+        .selected-option {
+            background-color: #4a5568 !important; /* Tailwind gray-700 */
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-40 p-4 bg-[#141414]">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-red-600 font-bold text-3xl">School Life Guide</h1>
+        </div>
+    </header>
+
+    <!-- Main Content - The full guide -->
+    <main class="main-content container mx-auto px-4">
+        <!-- Dynamic Content Sections -->
+        <section class="space-y-12">
+            <div id="intro-section" class="mb-12">
+                <div class="relative rounded-2xl overflow-hidden">
+                    <img src="https://placehold.co/1200x600/222/fff?text=High+School+Life+in+English" alt="High school students talking in a hallway" class="w-full h-96 object-cover">
+                    <div class="absolute inset-0 p-8 text-overlay flex flex-col justify-end rounded-2xl">
+                        <p class="text-base md:text-xl text-gray-300 max-w-2xl">
+                            This guide is here to help you understand the exciting world of a full-time high school in an English-speaking country. We'll compare key concepts to what you know from Brazil, so you can feel confident and prepared. Let's learn together! 🇧🇷➡️🇺🇸🇬🇧
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content will be populated dynamically below -->
+            <div id="learning-content" class="space-y-12"></div>
+        </section>
+        
+        <!-- Fill in the Blanks Quiz Section -->
+        <section id="quiz-section" class="py-12">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-6">Test Your Knowledge!</h2>
+            <div id="quiz-questions" class="bg-[#1e1e1e] p-8 rounded-2xl space-y-8">
+                <!-- Quiz questions will be dynamically populated here -->
+            </div>
+        </section>
+
+        <!-- Multiple Choice Quiz Section -->
+        <section id="multiple-choice-quiz-section" class="py-12">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-6">Multiple Choice Questions</h2>
+            <div id="multiple-choice-questions" class="bg-[#1e1e1e] p-8 rounded-2xl space-y-8">
+                <!-- Multiple choice questions will be dynamically populated here -->
+            </div>
+            <div id="multiple-choice-score" class="mt-4 text-center text-lg font-semibold"></div>
+        </section>
+
+    </main>
+
+    <script>
+        const schoolData = {
+            'daily-life': {
+                title: 'Daily School Life',
+                items: [
+                    { id: 'chit-chat', title: 'Hallway Chit-Chat 🗣️', points: ["An informal conversation students have between classes.", "A great way to make friends and practice your English!", "🇧🇷 **Brazilian Equivalent:** 'bate-papo' or 'conversa informal'."], imageUrl: 'https://placehold.co/1200x600/333/fff?text=Chit-Chat'},
+                    { id: 'gossiping', title: 'Gossiping in the Corner 🤫', points: ["This means talking about other people behind their backs.", "It's usually about crushes, drama, or who did what.", "🇧🇷 **Brazilian Equivalent:** 'fofoca'."], imageUrl: 'https://placehold.co/1200x600/444/fff?text=Gossiping' },
+                    { id: 'break-time', title: 'Break Time Activities 🥪', points: ["A short period, often 15-20 minutes, to grab a snack or relax.", "This is different from lunch time.", "🇧🇷 **Brazilian Equivalent:** 'intervalo'."], imageUrl: 'https://placehold.co/1200x600/555/fff?text=Break+Time' },
+                    { id: 'full-time', title: 'Full-Time vs. Part-Time 🏫', points: ["A **full-time** school means a long day, from morning until late afternoon.", "Many English-speaking schools are full-time to cover all subjects and activities.", "🇧🇷 **Brazilian Equivalent:** 'escola em período integral'."], imageUrl: 'https://placehold.co/1200x600/666/fff?text=Full-Time' }
+                ]
+            },
+            'academic': {
+                title: 'Academics & Achievements',
+                items: [
+                    { id: 'subjects', title: 'High School Subjects 📚', points: ["Students take a variety of classes like Science, Math, History, and English.", "In some schools, you get to choose **'electives'**.", "🇧🇷 **Brazilian Equivalent:** 'matérias' or 'disciplinas'."], imageUrl: 'https://placehold.co/1200x600/777/fff?text=Subjects' },
+                    { id: 'terms', title: 'School Terms & Exams 📝', points: ["The school year is divided into three **'terms'** (or **'semesters'** in the U.S.).", "You will have **'assignments'**, **'homework'**, and **'classwork'**.", "🇧🇷 **Brazilian Equivalent:** 'bimestres' or 'trimestres'."], imageUrl: 'https://placehold.co/1200x600/888/fff?text=Exams' },
+                    { id: 'promotions', title: 'Promotions & Repetition 🎓', points: ["If you pass your classes, you are **'promoted to the next year'**.", "If you fail, you might have to **'repeat the year'**.", "🇧🇷 **Brazilian Equivalent:** 'passa de ano' or 'repetir de ano'."], imageUrl: 'https://placehold.co/1200x600/999/fff?text=Promotions' },
+                    { id: 'awards', title: 'Prize Giving & Student Awards 🏆', points: ["A ceremony to honor students with awards for academic achievements or behavior.", "You might get an award for **'Student of the Year'**.", "🇧🇷 **Brazilian Equivalent:** 'dia de premiação' or 'formatura'."], imageUrl: 'https://placehold.co/1200x600/aaa/fff?text=Awards' }
+                ]
+            },
+            'people': {
+                title: 'The People at School',
+                items: [
+                    { id: 'teachers', title: 'Kinds of Teachers 👩‍🏫', points: ["The **'Headmaster'** or **'Principal'** is the school director.", "The **'Head Teacher'** is like a pedagogical coordinator.", "A **'Substitute Teacher'** fills in when another teacher is absent.", "🇧🇷 **Brazilian Equivalent:** 'diretor', 'coordenador pedagógico'."], imageUrl: 'https://placehold.co/1200x600/bbb/fff?text=Teachers' },
+                    { id: 'class-captain', title: 'The Class Captain 👨‍✈️', points: ["A student elected to help the teacher and be a class representative.", "🇧🇷 **Brazilian Equivalent:** 'representante de classe' or 'líder de turma'."], imageUrl: 'https://placehold.co/1200x600/ccc/fff?text=Captain' },
+                    { id: 'behaviour', title: 'Student Behavior 🧐', points: ["Students are expected to be **'pupils'** who follow the rules.", "Being **'talkative'** (tagarela) or causing a **'disturbance'** (bagunça) is not good.", "🇧🇷 **Brazilian Equivalent:** 'comportamento'."], imageUrl: 'https://placehold.co/1200x600/ddd/fff?text=Behavior' },
+                    { id: 'p-t-meeting', title: 'Parents & Teachers Meeting 🤝', points: ["A meeting where parents talk with teachers about their child’s progress and behavior.", "🇧🇷 **Brazilian Equivalent:** 'reunião de pais e mestres'."], imageUrl: 'https://placehold.co/1200x600/eee/fff?text=P-T+Meeting' }
+                ]
+            },
+            'facilities': {
+                title: 'School Facilities & Classes',
+                items: [
+                    { id: 'chem-lab', title: 'The Chemistry Lab ⚗️', points: ["A special classroom for experiments with chemicals and equipment.", "🇧🇷 **Brazilian Equivalent:** 'laboratório de Química'."], imageUrl: 'https://placehold.co/1200x600/f33/fff?text=Chem+Lab' },
+                    { id: 'comp-lab', title: 'The Computer Lab 💻', points: ["A room with computers for students to use for research or assignments.", "🇧🇷 **Brazilian Equivalent:** 'laboratório de informática'."], imageUrl: 'https://placehold.co/1200x600/3f3/fff?text=Computer+Lab' },
+                    { id: 'canteen', title: 'The Canteen & Snacks 😋', points: ["The school's cafeteria where students can buy food and drinks.", "🇧🇷 **Brazilian Equivalent:** 'cantina' or 'lanchonete'."], imageUrl: 'https://placehold.co/1200x600/33f/fff?text=Canteen' },
+                    { id: 'pe', title: 'Physical Education 🤸', points: ["A class for physical activity and sports, also called **'P.E.'**.", "You might do **'cross country'** (long-distance running) or play on the **'courts'** (quadras) and **'field'** (campo).", "🇧🇷 **Brazilian Equivalent:** 'aula de Educação Física'."], imageUrl: 'https://placehold.co/1200x600/ff3/fff?text=P.E.' }
+                ]
+            },
+            'more-topics': {
+                title: 'More Topics',
+                items: [
+                    { id: 'supplies', title: 'School Supplies & Materials 🎒', points: ["These are items you need for school, like notebooks, pens, and pencils.", "Many schools also have a **'school uniform'**.", "🇧🇷 **Brazilian Equivalent:** 'material escolar'."], imageUrl: 'https://placehold.co/1200x600/3ff/fff?text=Supplies' },
+                    { id: 'fees', title: 'School Fees & Funding 💸', points: ["Some schools require **'school fees'** (mensalidades).", "A **'state-funded secondary school'** is free to attend.", "🇧🇷 **Brazilian Equivalent:** 'escola particular' vs. 'escola pública'."], imageUrl: 'https://placehold.co/1200x600/f3f/fff?text=Fees' },
+                    { id: 'admission', title: 'Selective Admission 🧠', points: ["Some special schools are **'selective'** and require a **'competitive entrance exam'**.", "🇧🇷 **Brazilian Equivalent:** 'colégio técnico' or 'escola de aplicação'."], imageUrl: 'https://placehold.co/1200x600/fff/333?text=Admission' },
+                    { id: 'tuitions', title: 'Tuitions & Boarding Schools 🏡', points: ["**'Tuitions'** are private classes you take to improve your grades.", "A **'boarding school'** is a school where students also live and sleep.", "🇧🇷 **Brazilian Equivalent:** 'aulas particulares'."], imageUrl: 'https://placehold.co/1200x600/eee/333?text=Tuitions' }
+                ]
+            }
+        };
+
+        const quizData = [
+            { id: 'q1', text: "Talking about other people behind their backs is called __________.", answer: "gossiping" },
+            { id: 'q2', text: "Students can buy food and drinks at the school's __________.", answer: "canteen" },
+            { id: 'q3', text: "If you pass all your classes, you are __________ to the next year.", answer: "promoted" },
+            { id: 'q4', text: "The head of the school is called the Headmaster or __________.", answer: "Principal" },
+            { id: 'q5', text: "The classes you choose to take are called __________.", answer: "electives" },
+            { id: 'q6', text: "A meeting where parents and teachers talk about student progress is a 'Parents & Teachers __________'.", answer: "Meeting" },
+            { id: 'q7', text: "The class for physical activity and sports is called 'P.E.' or __________.", answer: "Physical Education" },
+            { id: 'q8', text: "A school where students also live and sleep is a __________ school.", answer: "boarding" }
+        ];
+
+        const multipleChoiceQuizData = [
+            {
+                id: 'mcq1',
+                question: 'What is the Brazilian equivalent of "gossiping"?',
+                options: ['bate-papo', 'fofoca', 'intervalo', 'tarefa'],
+                correctAnswer: 'fofoca'
+            },
+            {
+                id: 'mcq2',
+                question: 'Which term refers to private classes you take to improve your grades?',
+                options: ['electives', 'assignments', 'tuitions', 'terms'],
+                correctAnswer: 'tuitions'
+            },
+            {
+                id: 'mcq3',
+                question: 'A short period for students to grab a snack, different from lunch, is called what?',
+                options: ['break time', 'classwork', 'canteen', 'chit-chat'],
+                correctAnswer: 'break time'
+            },
+            {
+                id: 'mcq4',
+                question: 'What is a school where students also live?',
+                options: ['tuition', 'full-time school', 'state-funded school', 'boarding school'],
+                correctAnswer: 'boarding school'
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function generateContent() {
+            const container = document.getElementById('learning-content');
+            let contentHTML = '';
+
+            for (const sectionKey in schoolData) {
+                const section = schoolData[sectionKey];
+                
+                contentHTML += `<h2 class="text-3xl md:text-4xl font-extrabold text-white mb-6">${section.title}</h2>`;
+
+                section.items.forEach(item => {
+                    let pointsHTML = item.points.map(point => {
+                        const boldedPoint = point.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        return `<li class="text-gray-300 mb-2">${boldedPoint}</li>`;
+                    }).join('');
+
+                    contentHTML += `
+                        <div class="relative bg-[#1e1e1e] p-6 rounded-2xl flex flex-col md:flex-row items-start gap-6 mb-8">
+                            <div class="w-full md:w-1/3 flex-shrink-0 rounded-xl overflow-hidden">
+                                <img src="${item.imageUrl}" alt="${item.title}" class="w-full h-auto object-cover">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-white mb-3">${item.title}</h3>
+                                <ul class="list-disc list-inside space-y-2">
+                                    ${pointsHTML}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            container.innerHTML = contentHTML;
+        }
+
+        function generateQuiz() {
+            const quizContainer = document.getElementById('quiz-questions');
+            let quizHTML = '';
+
+            quizData.forEach(q => {
+                quizHTML += `
+                    <div class="flex flex-col md:flex-row items-center gap-4">
+                        <p class="text-lg text-gray-300 flex-1">${q.text}</p>
+                        <div class="flex items-center gap-2 w-full md:w-auto">
+                            <input type="text" id="${q.id}-input" class="flex-1 bg-gray-700 text-white p-2 rounded-lg border border-gray-600 focus:outline-none focus:border-red-500">
+                            <button onclick="checkAnswer('${q.id}')" class="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-500 transition-colors duration-200">
+                                Check
+                            </button>
+                        </div>
+                        <span id="${q.id}-feedback" class="text-sm font-semibold w-full md:w-48 text-right"></span>
+                    </div>
+                `;
+            });
+            quizContainer.innerHTML = quizHTML;
+        }
+        
+        function generateMultipleChoiceQuiz() {
+            const quizContainer = document.getElementById('multiple-choice-questions');
+            const scoreDisplay = document.getElementById('multiple-choice-score');
+
+            if (currentQuestionIndex >= multipleChoiceQuizData.length) {
+                quizContainer.innerHTML = `<p class="text-center text-xl font-bold">Quiz finished! Your final score is: ${score} / ${multipleChoiceQuizData.length}</p>`;
+                scoreDisplay.style.display = 'none';
+                return;
+            }
+
+            const questionData = multipleChoiceQuizData[currentQuestionIndex];
+
+            const optionsHTML = questionData.options.map(option => `
+                <button data-option="${option}"
+                    class="option-button flex-1 bg-gray-700 text-white p-3 rounded-lg hover:bg-gray-600 transition-colors duration-200 text-left">
+                    ${option}
+                </button>
+            `).join('');
+
+            quizContainer.innerHTML = `
+                <div id="${questionData.id}" class="bg-[#2a2a2a] p-6 rounded-xl">
+                    <p class="text-lg font-bold mb-4">${questionData.question}</p>
+                    <div class="flex flex-col gap-3">
+                        ${optionsHTML}
+                    </div>
+                </div>
+            `;
+            
+            scoreDisplay.textContent = `Score: ${score} / ${multipleChoiceQuizData.length}`;
+            
+            const optionButtons = quizContainer.querySelectorAll('.option-button');
+            optionButtons.forEach(button => {
+                button.addEventListener('click', () => handleMultipleChoiceClick(button));
+            });
+        }
+
+        function handleMultipleChoiceClick(clickedButton) {
+            const quizContainer = document.getElementById('multiple-choice-questions');
+            const questionData = multipleChoiceQuizData[currentQuestionIndex];
+            const buttons = quizContainer.querySelectorAll('.option-button');
+            
+            // Disable all buttons to prevent changing the answer
+            buttons.forEach(button => button.disabled = true);
+
+            const selectedOption = clickedButton.dataset.option;
+            const isCorrect = selectedOption === questionData.correctAnswer;
+            
+            if (isCorrect) {
+                score++;
+            }
+
+            // Highlight the correct and incorrect answers
+            buttons.forEach(button => {
+                if (button.dataset.option === questionData.correctAnswer) {
+                    button.classList.add('correct-answer');
+                } else if (button.dataset.option === selectedOption) {
+                    button.classList.add('incorrect-answer');
+                }
+            });
+            
+            // Update the score display
+            document.getElementById('multiple-choice-score').textContent = `Score: ${score} / ${multipleChoiceQuizData.length}`;
+
+            // Add a "Next Question" button
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Next Question';
+            nextButton.className = 'mt-4 bg-gray-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-gray-500 transition-colors duration-200';
+            nextButton.onclick = nextQuestion;
+            quizContainer.parentNode.appendChild(nextButton);
+        }
+
+        window.checkAnswer = function(questionId) {
+            const inputElement = document.getElementById(`${questionId}-input`);
+            const feedbackElement = document.getElementById(`${questionId}-feedback`);
+            const userAnswer = inputElement.value.trim().toLowerCase();
+            const question = quizData.find(q => q.id === questionId);
+
+            if (!question) {
+                feedbackElement.textContent = "Error: Question not found.";
+                feedbackElement.className = "text-sm font-semibold w-full md:w-48 text-right text-red-500";
+                return;
+            }
+
+            if (userAnswer === question.answer.toLowerCase()) {
+                feedbackElement.textContent = "Correct! ✅";
+                feedbackElement.className = "text-sm font-semibold w-full md:w-48 text-right text-green-500";
+                inputElement.classList.remove('border-red-500');
+                inputElement.classList.add('border-green-500');
+            } else {
+                feedbackElement.textContent = `Incorrect. The correct answer is '${question.answer}'. ❌`;
+                feedbackElement.className = "text-sm font-semibold w-full md:w-48 text-right text-red-500";
+                inputElement.classList.remove('border-green-500');
+                inputElement.classList.add('border-red-500');
+            }
+        };
+
+        window.nextQuestion = function() {
+            currentQuestionIndex++;
+            // Remove the next button before generating the next question
+            const nextButton = document.querySelector('#multiple-choice-quiz-section button.mt-4');
+            if (nextButton) {
+                nextButton.remove();
+            }
+            generateMultipleChoiceQuiz();
+        };
+
+
+        window.onload = function() {
+            generateContent();
+            generateQuiz();
+            generateMultipleChoiceQuiz();
+        };
+
+    </script>
+</body>
+</html>
